@@ -1,8 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* --background: #ffffff;
+  --foreground: #171717; */
+  --purple-accent: #7C3AED;
+  --nav-bg: #0a0a0a;
+  --border-color: rgba(255,255,255,0.08);
 }
 
 @theme inline {
