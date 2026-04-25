@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { getBlogs, deleteBlog } from "@/utils/blog/helper"
 import EmptyCard from "./EmptyCard"
@@ -118,9 +118,12 @@ export default function BlogCard() {
     }
 
     if (!loading && blogs.length === 0) {
-        return <EmptyCard />
+        return (
+            <Suspense fallback={<div className="text-center mt-10 text-slate-400 text-sm">Loading...</div>}>
+                <EmptyCard />
+            </Suspense>
+        )
     }
-
     return (
         <>
             {deleteId && <DeleteConfirmCard onConfirm={handleConfirmDelete} onCancel={() => setDeleteId(null)} />}

@@ -5,6 +5,7 @@ import CreateBlogButton from "../../../components/Buttons/CreateBlogButton";
 import FilterButton from "../../../components/Buttons/FilterButton";
 import MainHeading from "../../../components/Heading/MainHeading";
 import FeaturesCard from "../../../components/Card/FeaturesCard";
+import { Suspense } from "react";
 
 export default function Dashboard() {
   // const token = typeof window !== "undefined" ? localStorage.getItem("token") : null
@@ -39,7 +40,9 @@ export default function Dashboard() {
         <MainHeading heading="Trending Blogs" />
 
         <div className="flex justify-between flex-col md:flex-row px-24 pt-4">
-          <FilterButton />        
+          <Suspense fallback={<div className="text-center mt-10 text-slate-400 text-sm">Loading...</div>}>
+              <FilterButton /> 
+          </Suspense>       
           <CreateBlogButton />
         </div>
         
