@@ -29,12 +29,12 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${dmSans.variable} h-full antialiased`}
+      className={`${dmSans.className} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Header />
+        {/* <Header /> */}
         {children}
-        <Footer />
+        {/* <Footer /> */}
         </body>
     </html>
   );
