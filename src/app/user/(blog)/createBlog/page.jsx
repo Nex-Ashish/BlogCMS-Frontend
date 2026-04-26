@@ -1,10 +1,12 @@
-import MainHeading from "../../../../../components/Heading/MainHeading";
+import { Suspense } from "react";
+import CreateBlogForm from "../../../../../components/Card/CreateBlogForm";
 
-export default function createBlog() {
+export default function CreateBlog() {
     return(
-        <div className="pb-20">
-            <MainHeading heading="Create Your Blog Here..." />
+        <div >
+            <Suspense fallback={<div className="text-center mt-10 text-white/40 text-sm">Loading...</div>}>
+                <CreateBlogForm />
+            </Suspense>
         </div>
-        
     )
 }

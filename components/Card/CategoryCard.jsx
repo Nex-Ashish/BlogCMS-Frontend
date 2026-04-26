@@ -69,9 +69,9 @@ export default function CategoryCard() {
             <option value="" disabled className="bg-[#1a1a2e]">
               {loading ? "Loading categories..." : "Select a category..."}
             </option>
-            {categories.map((title) => (
-              <option key={title} value={title} className="bg-[#1a1a2e]">
-                {title}
+            {categories.map((category) => (
+              <option key={category._id} value={category.title} className="bg-[#1a1a2e]">
+                {category.title}
               </option>
             ))}
           </select>

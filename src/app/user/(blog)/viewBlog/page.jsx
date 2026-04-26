@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import BlogCard from "../../../../../components/Card/BlogCard";
 import MainHeading from "../../../../../components/Heading/MainHeading";
 
-export default function viewBlog() {
+export default function ViewBlog() {
     return(
         <div className="pb-20">
             <MainHeading heading="View Your Blogs Here..." />

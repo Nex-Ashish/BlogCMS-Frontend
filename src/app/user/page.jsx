@@ -39,7 +39,7 @@ export default function Dashboard() {
         
         <MainHeading heading="Trending Blogs" />
 
-        <div className="flex justify-between flex-col md:flex-row px-24 pt-4">
+        <div className="flex flex-col items-center gap-3 sm:flex-row px-0 md:px-24.5 md:justify-between pt-10">
           <Suspense fallback={<div className="text-center mt-10 text-slate-400 text-sm">Loading...</div>}>
               <FilterButton /> 
           </Suspense>       

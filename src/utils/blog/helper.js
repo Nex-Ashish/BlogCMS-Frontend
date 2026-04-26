@@ -2,8 +2,8 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const token= typeof window !== "undefined" ? document.cookie.split(';').find(c => c.trim().startsWith('token='))?.split('=')[1] : null
 
-export async function getBlogs(category = "") {
-  const url = category ? `${BASE_URL}/api/blogs?category=${category}` : `${BASE_URL}/api/blogs`;
+export async function getBlogs(category = "", page = 1) {
+  const url = category ? `${BASE_URL}/api/blogs?category=${category}&page=${page}` : `${BASE_URL}/api/blogs?page=${page}`;
 
   // const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
@@ -40,16 +40,35 @@ export async function deleteBlog(blogId) {
   return data;
 }
 
-export async function updateBlog(blogId, blogData) {
-  // const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+export async function createBlog(formData) {
+  const token= typeof window !== "undefined" ? document.cookie.split(';').find(c => c.trim().startsWith('token='))?.split('=')[1] : null
+  const res = await fetch(`${BASE_URL}/api/blogs`, {
+    method: "POST",
+    headers: {
+      // "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    body: formData,
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message ?? "Failed to create blog");
+  }
+
+  return data;
+}
+
+export async function updateBlog(blogId, formData) {
+  const token = document.cookie.split(';').find(c => c.trim().startsWith('token='))?.split('=')[1]
 
   const res = await fetch(`${BASE_URL}/api/blogs/${blogId}`, {
     method: "PUT",
     headers: {
-      "Content-Type": "application/json",
       ...(token && { Authorization: `Bearer ${token}` }),
     },
-    body: JSON.stringify(blogData),
+    body: formData,
   });
 
   const data = await res.json();

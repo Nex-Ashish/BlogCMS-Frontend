@@ -6,5 +6,5 @@ export async function fetchCategories() {
   if (!res.ok) throw new Error("Failed to fetch categories");
   const data = await res.json();
 
-  return data?.categories?.map(item => item?.title ? item.title.charAt(0).toUpperCase() + item.title.slice(1) : "" ) ?? [];
+  return data?.categories?.map(item => ({ _id: item._id, title: item.title ? item.title.charAt(0).toUpperCase() + item.title.slice(1) : "" })) ?? []
 }
