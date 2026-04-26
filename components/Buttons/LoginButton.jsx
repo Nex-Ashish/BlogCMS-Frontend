@@ -28,7 +28,7 @@ export default function AuthButton({ title = "Login" }) {
         <div className="p-1 border border-white/50 rounded-full self-start">
             <button
                 onClick={handleClick}
-                className="flex items-center gap-2.5 hover:bg-amber-200 cursor-pointer bg-white rounded-full text-[#111] text-sm font-medium border border-purple-500/30 shadow-[0_0_15px_rgba(124,58,237,0.3)] pl-5 pr-2.5 py-1.5"
+                className="flex items-center gap-2.5 hover:bg-amber-300 cursor-pointer bg-white rounded-full text-[#111] text-sm font-medium border border-purple-500/30 shadow-[0_0_15px_rgba(124,58,237,0.3)] pl-5 pr-2.5 py-1.5"
             >
                 {isLoggedIn ? title : title}
                 <span className="w-8 h-8 rounded-full bg-[#7C3AED] flex items-center justify-center shrink-0">

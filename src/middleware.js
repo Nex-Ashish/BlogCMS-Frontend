@@ -4,7 +4,7 @@ export async function middleware(request) {
   const token = request.cookies.get('token')?.value;
   const { pathname } = request.nextUrl;
 
-  const isPublic = pathname === "/user/about";
+  const isPublic = pathname === "/user/about" || pathname.startsWith("/user/legal");
   const isProtected = pathname.startsWith("/user/") || pathname.startsWith("/admin");
 
   if (!token && isProtected  && !isPublic) {

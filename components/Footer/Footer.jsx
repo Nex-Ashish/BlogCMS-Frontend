@@ -37,10 +37,10 @@ export default function Footer() {
 
         <div className="flex flex-col gap-3">
           <h3 className="text-white/70 text-xl font-bold">Legal</h3>
-          <a href="#" className="text-white/80 hover:text-white">Privacy Policy</a>
-          <a href="#" className="text-white/80 hover:text-white">Terms of Use</a>
-          <a href="#" className="text-white/80 hover:text-white">Content Guidelines</a>
-          <a href="#" className="text-white/80 hover:text-white">Copyright Policy</a>
+          <a href="/user/legal/privacy" className="text-white/80 hover:text-white">Privacy Policy</a>
+          <a href="/user/legal/termsOfUse" className="text-white/80 hover:text-white">Terms of Use</a>
+          <a href="/user/legal/contentGuidelines" className="text-white/80 hover:text-white">Content Guidelines</a>
+          <a href="/user/legal/copyrightPolicy" className="text-white/80 hover:text-white">Copyright Policy</a>
         </div>
 
         <div className="flex flex-col gap-3">

@@ -1,6 +1,7 @@
 "use client"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBolt, faLayerGroup, faShieldHalved, faChartLine, faPenNib, faUsers } from "@fortawesome/free-solid-svg-icons"
+import DarkHeading from "../Heading/DarkHeading"
 
 const features = [
     { icon: faPenNib, title: "Rich Text Editor", description: "Write beautifully with a powerful editor that supports markdown, media embeds, and custom formatting." },
@@ -16,10 +17,11 @@ export default function FeaturesCard() {
         <section id="features" className="w-full bg-gradient-to-b from-black via-[#0d0614] to-black py-24 px-6 lg:px-20">
             <div className="max-w-6xl mx-auto">
                 <div className="flex flex-col items-center text-center mb-16">
-                    <span className="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/20 text-violet-400 text-sm font-medium tracking-widest px-4 py-1.5 rounded-full mb-5">
+                    {/* <span className="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/20 text-violet-400 text-sm font-medium tracking-widest px-4 py-1.5 rounded-full mb-5">
                         <FontAwesomeIcon icon={faBolt} className="text-[10px]" />
                         Features
-                    </span>
+                    </span> */}
+                    <DarkHeading heading="Features" />
                     <h2 className="text-3xl lg:text-4xl font-semibold text-slate-100 leading-tight mb-4">
                         Everything You Need to <br />
                         <span className="text-[#7C3AED]">Publish Smarter</span>

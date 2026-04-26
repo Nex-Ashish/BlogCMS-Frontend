@@ -1,5 +1,4 @@
 import AboutHero from "../../../../components/Card/AboutHero";
-import CTASection from "../../../../components/Card/CTASection";
 import TeamSection from "../../../../components/Card/TeamSection";
 
 export default function About() {
@@ -7,7 +6,6 @@ export default function About() {
     <div className="bg-white text-slate-800">
       <AboutHero />
       <TeamSection />
-      {/* <CTASection /> */}
     </div>
   )
 }
