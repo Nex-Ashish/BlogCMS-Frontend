@@ -8,7 +8,7 @@ import registerIcon from "../../public/assets/registerIcon.png"
 import { registerUser } from "@/utils/auth/helper";
 
 export default function RegisterCard() {
-  const [form, setForm] = useState({ name: "", email: "", password: "", confirm: "", role: "user" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", confirm: "" });
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const [error, setError] = useState(null);
@@ -29,7 +29,7 @@ export default function RegisterCard() {
 
     try {
       setLoading(true);
-      const data = await registerUser({ name: form.name, email: form.email, password: form.password, role: form.role });
+      const data = await registerUser({ name: form.name, email: form.email, password: form.password });
       // localStorage.setItem("token", data.token);
       document.cookie = `token=${data.token}; path=/; max-age=604800`;
 
@@ -119,24 +119,6 @@ export default function RegisterCard() {
           onChange={update("confirm")}
           className="w-full bg-white/10 border border-white/10 text-white placeholder-white/25 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 mb-6"
         />
-
-        <label className="text-xs font-semibold text-white/50 mb-2 block">Role</label>
-        <div className="flex gap-3 mb-6">
-          {["user", "admin"].map((r) => (
-            <button
-              key={r}
-              type="button"
-              onClick={() => setForm({ ...form, role: r })}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-semibold capitalize transition-colors border
-                ${form.role === r
-                  ? "bg-indigo-600 text-white border-indigo-500"
-                  : "bg-white/5 text-white/40 border-white/10 hover:border-white/20"
-                }`}
-            >
-              {r === "user" ? "User" : "Admin"}
-            </button>
-          ))}
-        </div>
 
         {error && ( <p className="text-red-400 text-xs mb-3">{error}</p> )}
 

@@ -83,6 +83,7 @@ export default function Header() {
   const [token, setToken] = useState(null);
   const router = useRouter();
   const [userId, setUserId] = useState()
+  const [profileOpen, setProfileOpen] = useState(false);
 
   useEffect(() => {
     // const stored = localStorage.getItem("token");
@@ -140,7 +141,9 @@ export default function Header() {
         <div className="lg:hidden bg-black/95 px-5 pb-6">
           <nav className="flex flex-col">
             {NAV_LINKS.map((item) => (
-              <a key={item.href} href={item.href} className="flex items-center justify-between py-4 text-white text-sm font-medium border-b border-white/10">
+              <a key={item.href} href={item.href}
+                onClick={() => setOpenHeaderMenu(false)}
+                className="flex items-center justify-between py-4 text-white text-sm font-medium border-b border-white/10">
                 {item.label}
                 <FontAwesomeIcon icon={faAngleRight} className="h-3.5 w-3.5 text-white/40" />
               </a>
@@ -148,23 +151,36 @@ export default function Header() {
 
             {token && (
               <>
-                <button onClick={() => { router.push("/profile"); setOpenHeaderMenu(false); }} className="flex items-center justify-between py-4 text-white text-sm font-medium border-b border-white/10 w-full" >
+                <button
+                  onClick={() => setProfileOpen(!profileOpen)}
+                  className="flex items-center justify-between py-4 text-white text-sm font-medium border-b border-white/10 w-full"
+                >
                   <span className="flex items-center gap-2">
                     <FontAwesomeIcon icon={faUser} className="h-3.5 w-3.5 text-white/60" />
                     View Profile
                   </span>
-                  <FontAwesomeIcon icon={faAngleRight} className="h-3.5 w-3.5 text-white/40" />
+                  <FontAwesomeIcon icon={faChevronDown} className={`h-3 w-3 text-white/40 transition-transform duration-200 ${profileOpen ? "rotate-180" : ""}`} />
                 </button>
 
-                <button onClick={() => { router.push(`/user/viewBlog?userId=${userId}`) }} className="flex items-center gap-2 py-4 text-red-400 text-sm font-medium w-full" >
-                  <FontAwesomeIcon icon={faNewspaper} className="h-3.5 w-3.5" />
-                  View Blogs
-                </button>
-
-                <button onClick={handleLogout} className="flex items-center gap-2 py-4 text-red-400 text-sm font-medium w-full" >
-                  <FontAwesomeIcon icon={faRightFromBracket} className="h-3.5 w-3.5" />
-                  Logout
-                </button>
+                {profileOpen && (
+                  <div className="flex flex-col pl-4 border-b border-white/10">
+                    <button onClick={() => { router.push("/user/profile"); setOpenHeaderMenu(false); setProfileOpen(false); }}
+                      className="flex items-center gap-2 py-3 text-white/70 text-sm">
+                      <FontAwesomeIcon icon={faUser} className="h-3.5 w-3.5" />
+                      My Profile
+                    </button>
+                    <button onClick={() => { router.push(`/user/viewBlog?userId=${userId}`); setOpenHeaderMenu(false); setProfileOpen(false); }}
+                      className="flex items-center gap-2 py-3 text-white/70 text-sm">
+                      <FontAwesomeIcon icon={faNewspaper} className="h-3.5 w-3.5" />
+                      View Blogs
+                    </button>
+                    <button onClick={() => { handleLogout(); setOpenHeaderMenu(false); }}
+                      className="flex items-center gap-2 py-3 text-red-400 text-sm">
+                      <FontAwesomeIcon icon={faRightFromBracket} className="h-3.5 w-3.5" />
+                      Logout
+                    </button>
+                  </div>
+                )}
               </>
             )}
           </nav>
