@@ -28,7 +28,7 @@ export default function LoginCard(  ) {
       const payload = JSON.parse(atob(data.token.split(".")[1]));
       const role = payload?.role;
 
-      if (role === "admin") {
+      if (role?.toLowerCase() === "admin") {
         router.push("/admin");
       } else {
         router.push("/user");

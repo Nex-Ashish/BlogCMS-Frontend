@@ -1,10 +1,9 @@
-import MainHeading from "../../../../../components/Heading/MainHeading";
+import CreateBlogForm from "../../../../../components/Card/CreateBlogForm";
 
-export default function createBlog() {
+export default function CreateBlog() {
     return(
-        <div className="pb-20">
-            <MainHeading heading="Create Your Blog Here..." />
+        <div >
+            <CreateBlogForm />
         </div>
-        
     )
 }

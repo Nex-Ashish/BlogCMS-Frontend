@@ -19,7 +19,8 @@ export default function FilterButton({ onFilterChange }) {
     const getCategories = async () => {
       try {
         const titles = await fetchCategories();
-        setFilters(["All", ...titles]); 
+        // setFilters(["All", ...titles]); 
+        setFilters(["All", ...titles.map(cat => cat.title)]);
       } catch (err) {
         console.error("Categories fetch failed:", err.message);
       }
@@ -65,7 +66,7 @@ export default function FilterButton({ onFilterChange }) {
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 mt-2 w-48 bg-white border border-black/10 rounded-2xl shadow-xl shadow-black/10 overflow-hidden z-50">
+        <div className="absolute left-0 mt-2 w-48 bg-white border border-black/10 rounded-2xl shadow-xl shadow-black/10 overflow-hidden z-50 max-h-60 overflow-y-auto">
           {filters.map((filter) => (
             <button
               key={filter}

@@ -56,6 +56,14 @@ function ProfileDropdown({ onLogout }) {
 
             
             <button
+                onClick={() => { router.push('/user/createBlog'); setOpen(false); }}
+                className="w-full flex items-center gap-3 px-4 py-3 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-150"
+            >
+                <FontAwesomeIcon icon={faNewspaper} className="h-3.5 w-3.5" />
+                Create Blog
+            </button>
+
+            <button
                 onClick={() => { router.push(`/user/viewBlog?userId=${userId}`); setOpen(false); }}
                 className="w-full flex items-center gap-3 px-4 py-3 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-150"
             >
@@ -168,6 +176,11 @@ export default function Header() {
                       className="flex items-center gap-2 py-3 text-white/70 text-sm">
                       <FontAwesomeIcon icon={faUser} className="h-3.5 w-3.5" />
                       My Profile
+                    </button>
+                    <button onClick={() => { router.push('/user/createBlog'); setOpenHeaderMenu(false); setProfileOpen(false); }}
+                      className="flex items-center gap-2 py-3 text-white/70 text-sm">
+                      <FontAwesomeIcon icon={faNewspaper} className="h-3.5 w-3.5" />
+                      Create Blog
                     </button>
                     <button onClick={() => { router.push(`/user/viewBlog?userId=${userId}`); setOpenHeaderMenu(false); setProfileOpen(false); }}
                       className="flex items-center gap-2 py-3 text-white/70 text-sm">

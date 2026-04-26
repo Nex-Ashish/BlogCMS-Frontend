@@ -15,7 +15,7 @@ export default function CreateBlogButton() {
   }
     return (
         <div className="flex justify-end ">
-            <button onClick={handleCreate} className="group flex items-center gap-2 px-5 py-3 rounded-full bg-[#7C3AED] text-white text-sm font-medium shadow-lg shadow-purple-200 hover:bg-[#6D28D9] hover:shadow-purple-300 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200" >
+            <button onClick={handleCreate} className="group flex items-center gap-2 px-5 py-3 rounded-full bg-[#7C3AED] text-white text-sm font-medium shadow-lg shadow-purple-200 hover:bg-[#6D28D9] hover:shadow-purple-300 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 whitespace-nowrap" >
               <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-base leading-none group-hover:rotate-90 transition-transform duration-300">
                 +
               </span>

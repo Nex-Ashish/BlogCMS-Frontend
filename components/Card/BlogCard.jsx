@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPen, faTrash, faCircleCheck } from "@fortawesome/free-solid-svg-icons"
 import SuccessMessageCard from "./SuccessMessageCard"
 import Loading from "./Loading"
+import CreateBlogForm from "./CreateBlogForm"
 
 const AVATAR_COLORS = [
     "bg-violet-100 text-violet-600",
@@ -64,6 +65,12 @@ export default function BlogCard() {
 
     const category = searchParams.get("category")?.toLowerCase() || ""
     const userId = searchParams.get("userId") || ""
+    const [editBlogId, setEditBlogId] = useState(null)
+
+    const [page, setPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(1)
+    const [loadingMore, setLoadingMore] = useState(false)
+
 
     const showSuccess = (msg) => {
         setSuccessMsg(msg)
@@ -72,22 +79,39 @@ export default function BlogCard() {
 
     useEffect(() => {
         setShowFull(null)
-        const fetchData = async () => {
-            try {
-                setLoading(true)
-                setBlogs([])
-                const data = await getBlogs(category)
-                const allBlogs = data.blogs || []
-                setBlogs(userId ? allBlogs.filter(b => b?.author?._id === userId) : allBlogs)
-            } catch (err) {
-                console.log(err)
-                setBlogs([])
-            } finally {
-                setLoading(false)
-            }
-        }
-        fetchData()
+        setPage(1)
+        setBlogs([])
+        fetchData(1)
     }, [category, userId])
+
+    const fetchData = async (pageNum) => {
+        try {
+            pageNum === 1 ? setLoading(true) : setLoadingMore(true)
+            const data = await getBlogs(category, pageNum)
+            const allBlogs = data.blogs || []
+            setTotalPages(data.pagination?.pages || 1)
+            const publicBlogs = allBlogs.filter(blog => blog?.isPublic === true || blog?.isPublic === undefined)
+            const filtered = userId ? publicBlogs.filter(b => b?.author?._id === userId) : publicBlogs
+            setBlogs(prev => pageNum === 1 ? filtered : [...prev, ...filtered])
+            if (userId) {
+                setTotalPages(1)
+            } else {
+                setTotalPages(data.pagination?.pages || 1)
+            }
+        } catch (err) {
+            console.log(err)
+            if (pageNum === 1) setBlogs([])
+        } finally {
+            setLoading(false)
+            setLoadingMore(false)
+        }
+    }
+
+    const handleLoadMore = () => {
+        const nextPage = page + 1
+        setPage(nextPage)
+        fetchData(nextPage)
+    }
 
     const handleSeeMore = (index, isOpen) => {
         if (!isLoggedIn) {
@@ -98,7 +122,7 @@ export default function BlogCard() {
     }
 
     const handleEdit = (blogId) => {
-        router.push(`/user/editBlog?blogId=${blogId}`)
+        setEditBlogId(blogId)
     }
 
     const handleConfirmDelete = async () => {
@@ -124,8 +148,28 @@ export default function BlogCard() {
             </Suspense>
         )
     }
+
     return (
         <>
+            {editBlogId && (
+                <div className="fixed inset-0 z-50  backdrop-blur-sm overflow-y-auto">
+                    <div className=" flex items-start justify-center py-10 px-4">
+                        <div className="relative w-full max-w-3xl">
+                            <button
+                            onClick={() => setEditBlogId(null)}
+                            className="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors"
+                            >
+                            X
+                            </button>
+                            <CreateBlogForm blogId={editBlogId} onSuccess={() => {
+                            setEditBlogId(null)
+                            showSuccess("Your blog has been updated successfully.")
+                            }} />
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {deleteId && <DeleteConfirmCard onConfirm={handleConfirmDelete} onCancel={() => setDeleteId(null)} />}
             {successMsg && <SuccessMessageCard message={successMsg} />}
 
@@ -169,9 +213,11 @@ export default function BlogCard() {
 
                             <div className="px-5 py-4 flex flex-col flex-1">
                                 <h2 className="font-bold text-sm text-slate-800 leading-snug mb-2">{blog.title}</h2>
-                                <p className="text-sm text-slate-500 leading-relaxed font-light flex-1">
-                                    {isOpen ? blog.content : `${shortText}...`}
-                                </p>
+                                <div className="text-sm text-slate-500 leading-relaxed font-light flex-1 prose prose-sm max-w-none"
+                                    dangerouslySetInnerHTML={{
+                                        __html: isOpen ? blog.content : `${blog.content?.slice(0, 100) || ""}...`
+                                    }}
+                                />
                                 <button onClick={() => handleSeeMore(index, isOpen)} className="mt-3 self-start text-xs cursor-pointer font-medium text-indigo-500 hover:text-indigo-700 tracking-widest uppercase transition-colors duration-200">
                                     {isOpen ? "See less" : "See more"}
                                 </button>
@@ -190,6 +236,18 @@ export default function BlogCard() {
                     )
                 })}
             </div>
+
+            {page < totalPages && (
+                <div className="flex justify-center mt-4 pb-8">
+                    <button
+                    onClick={handleLoadMore}
+                    disabled={loadingMore}
+                    className="px-6 py-2.5 rounded-full text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-500 disabled:opacity-50 transition-colors"
+                    >
+                    {loadingMore ? "Loading..." : "Load More"}
+                    </button>
+                </div>
+            )}
         </>
     )
 }
