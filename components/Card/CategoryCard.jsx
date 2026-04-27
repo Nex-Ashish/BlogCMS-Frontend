@@ -31,7 +31,8 @@ export default function CategoryCard() {
 
   const handleGo = () => {
     if (selected) {
-      router.push(`/user?category=${selected.toLowerCase()}`);
+      // router.push(`/user?category=${selected.toLowerCase()}`);
+      router.push(`/user?category=${selected}`);
     }
   };
 
