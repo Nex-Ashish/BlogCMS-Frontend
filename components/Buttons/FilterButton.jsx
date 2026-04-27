@@ -51,18 +51,35 @@ export default function FilterButton({ onFilterChange }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // const handleFilter = (filter) => {
+  //   setActiveFilter(filter);
+  //   const params = new URLSearchParams(searchParams.toString());
+  //   if (filter === "All") {
+  //     params.delete("category");
+  //   } else {
+  //     // params.set("category", filter.toLowerCase());
+  //     params.set("category", filter);
+  //   }
+  //   router.replace(`?${params.toString()}`);
+  //   // router.push(`?${params.toString()}`, { scroll: false });
+  //   // if (onFilterChange) onFilterChange(filter);
+  //   setIsOpen(false);
+  // };
+
   const handleFilter = (filter) => {
     setActiveFilter(filter);
-    const params = new URLSearchParams(searchParams.toString());
+    
+    const params = new URLSearchParams(window.location.search);
+    
     if (filter === "All") {
       params.delete("category");
     } else {
-      // params.set("category", filter.toLowerCase());
       params.set("category", filter);
     }
-    router.replace(`?${params.toString()}`);
-    // router.push(`?${params.toString()}`, { scroll: false });
-    // if (onFilterChange) onFilterChange(filter);
+  
+    window.history.pushState({}, '', `?${params.toString()}`);
+    router.refresh();
+    
     setIsOpen(false);
   };
 
