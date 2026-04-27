@@ -60,8 +60,8 @@ export default function FilterButton({ onFilterChange }) {
       // params.set("category", filter.toLowerCase());
       params.set("category", filter);
     }
-    // router.replace(`?${params.toString()}`);
-    router.push(`?${params.toString()}`, { scroll: false });
+    router.replace(`?${params.toString()}`);
+    // router.push(`?${params.toString()}`, { scroll: false });
     // if (onFilterChange) onFilterChange(filter);
     setIsOpen(false);
   };
