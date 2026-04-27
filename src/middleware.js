@@ -5,11 +5,11 @@ export async function middleware(request) {
   const { pathname } = request.nextUrl;
 
   const isPublic = pathname === "/user/about" || pathname.startsWith("/user/legal");
-  // const isProtected = pathname.startsWith("/user/") || pathname.startsWith("/admin");
+  const isProtected = pathname.startsWith("/user/") || pathname.startsWith("/admin");
 
-  // if (!token && isProtected  && !isPublic) {
-  //   return NextResponse.redirect(new URL("/auth/login", request.url));
-  // }
+  if (!token && isProtected  && !isPublic) {
+    return NextResponse.redirect(new URL("/auth/login", request.url));
+  }
 
   return NextResponse.next();
 }

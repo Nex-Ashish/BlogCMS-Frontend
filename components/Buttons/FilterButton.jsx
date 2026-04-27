@@ -59,8 +59,8 @@ export default function FilterButton({ onFilterChange }) {
     } else {
       params.set("category", filter.toLowerCase());
     }
-    router.push(`?${params.toString()}`);
-    if (onFilterChange) onFilterChange(filter);
+    router.replace(`?${params.toString()}`);
+    // if (onFilterChange) onFilterChange(filter);
     setIsOpen(false);
   };
 

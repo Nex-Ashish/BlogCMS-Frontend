@@ -62,7 +62,7 @@ export default function ProfileCard() {
                   <img src={image} alt="Profile" className="w-full h-full object-cover" />
                 ) : ( */}
                   <div className="w-full h-full rounded-full bg-[#7C3AED] flex items-center justify-center text-white font-medium text-lg">
-                    {getInitials(user.name)}
+                    {getInitials(user?.name)}
                   </div>
                 {/* )} */}
               </div>
