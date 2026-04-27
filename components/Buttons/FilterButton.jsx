@@ -57,7 +57,8 @@ export default function FilterButton({ onFilterChange }) {
     if (filter === "All") {
       params.delete("category");
     } else {
-      params.set("category", filter.toLowerCase());
+      // params.set("category", filter.toLowerCase());
+      params.set("category", filter);
     }
     router.replace(`?${params.toString()}`);
     // if (onFilterChange) onFilterChange(filter);
