@@ -164,6 +164,8 @@ export default function BlogCard() {
                             <CreateBlogForm blogId={editBlogId} onSuccess={() => {
                             setEditBlogId(null)
                             showSuccess("Your blog has been updated successfully.")
+                            setBlogs([])    
+                            fetchData(1) 
                             }} />
                         </div>
                     </div>
