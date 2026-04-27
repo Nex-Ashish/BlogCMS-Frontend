@@ -48,7 +48,6 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess }) {
         })
         const data = await res.json()
         const blog = data.blog || data
-        // console.log(blog,'blog-data')
         setExistingImage(blog.coverImage || "")
         setForm({
             title: blog.title || "",
@@ -100,7 +99,7 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess }) {
         formData.append("category", form.category)
         formData.append("tags", JSON.stringify(tagsArray))
         formData.append("isPublic", form.isPublic)
-        if (form.image) formData.append("coverImage", form.image)
+        if (form.image) formData.append("image", form.image)
         await updateBlog(blogId, formData)
         showSuccess("Your blog has been updated successfully.")
       } else {
@@ -178,35 +177,59 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess }) {
         />
       ),
     },
-    ...(!isEdit ? [
-      {
-        icon: faImage,
-        label: "Cover Image",
-        node: (
-          <div>
-            {existingImage && (
-              <div className="mb-2">
-                <Image src={existingImage} alt="current" className="rounded-xl object-cover w-20 h-20" />
-                <p className="text-white/30 text-xs mt-1">Current image — upload new to replace</p>
+    {
+      icon: faImage,
+      label: "Cover Image",
+      node: (
+        <div>
+          {existingImage && !form.image && (
+            <div className="mb-3 flex items-center gap-3">
+              <img
+                src={existingImage}
+                alt="Current cover"
+                className="rounded-xl object-cover w-20 h-20 ring-2 ring-white/10"
+              />
+              <div>
+                <p className="text-white/60 text-xs font-medium">Current cover image</p>
+                <p className="text-white/30 text-xs mt-0.5">Upload a new one to replace it</p>
               </div>
-            )}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={e => setForm({ ...form, image: e.target.files[0] })}
-              className="w-full bg-white/10 border border-white/10 text-white/50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:bg-indigo-500/20 file:text-indigo-300 cursor-pointer"
-            />
-          </div>
-        ),
-      },
-    ] : []),
+            </div>
+          )}
+          {form.image && (
+            <div className="mb-3 flex items-center gap-3">
+              <img
+                src={URL.createObjectURL(form.image)}
+                alt="New cover preview"
+                className="rounded-xl object-cover w-20 h-20 ring-2 ring-indigo-400/50"
+              />
+              <div>
+                <p className="text-indigo-300 text-xs font-medium">New image selected</p>
+                <button
+                  type="button"
+                  onClick={() => setForm({ ...form, image: null })}
+                  className="text-white/30 text-xs mt-0.5 hover:text-red-400 transition-colors"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={e => setForm({ ...form, image: e.target.files[0] })}
+            className="w-full bg-white/10 border border-white/10 text-white/50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:bg-indigo-500/20 file:text-indigo-300 cursor-pointer"
+          />
+        </div>
+      ),
+    },
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-[#0d0614] to-black px-4 sm:px-6 lg:px-20 py-16">
+    <div className="min-h-screen bg-white">
       {successMsg && <SuccessMessageCard message={successMsg} />}
 
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-3xl mx-auto my-10 px-6 py-10 bg-gradient-to-br from-black via-[#0d0614] to-black rounded-2xl shadow-xl">
         <h1 className="text-2xl font-bold text-white mb-1">
           {isEdit ? "Edit Blog" : "Create Blog"}
         </h1>
