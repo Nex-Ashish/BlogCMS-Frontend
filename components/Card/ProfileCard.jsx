@@ -53,7 +53,7 @@ export default function ProfileCard() {
 
   return (
     <main className="py-10 px-4">
-      <div className="max-w-lg mx-auto bg-gradient-to-br from-black via-[#0d0614] rounded-3xl border border-slate-100 overflow-hidden">
+      <div className="max-w-lg mx-auto bg-gradient-to-br from-black via-[#0d0614] to-black rounded-3xl overflow-hidden">
         <div className="h-24 bg-[#7C3AED] relative">
           <div className="absolute -bottom-9 left-7">
             <div className="relative w-[72px] h-[72px]">

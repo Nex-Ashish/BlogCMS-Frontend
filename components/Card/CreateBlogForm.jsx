@@ -226,10 +226,10 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess }) {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-[#0d0614] to-black px-4 sm:px-6 lg:px-20 py-16">
+    <div className="min-h-screen bg-white">
       {successMsg && <SuccessMessageCard message={successMsg} />}
 
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-3xl mx-auto my-10 px-6 py-10 bg-gradient-to-br from-black via-[#0d0614] to-black rounded-2xl shadow-xl">
         <h1 className="text-2xl font-bold text-white mb-1">
           {isEdit ? "Edit Blog" : "Create Blog"}
         </h1>
