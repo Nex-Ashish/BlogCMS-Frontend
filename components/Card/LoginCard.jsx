@@ -29,7 +29,7 @@ export default function LoginCard(  ) {
       const role = payload?.role;
 
       if (role?.toLowerCase() === "admin") {
-        router.push("/admin");
+        router.push("/admin/dashboard");
       } else {
         router.push("/user");
       }
