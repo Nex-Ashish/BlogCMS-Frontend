@@ -16,6 +16,7 @@ export default function PostsTable() {
   const [deleteId, setDeleteId] = useState(null); 
   const [successMsg, setSuccessMsg] = useState(null);
   const [editId, setEditId]     = useState(null);
+  const [deleting, setDeleting] = useState(false); 
 
   useEffect(() => {
     let cancelled = false;
@@ -41,6 +42,7 @@ export default function PostsTable() {
   }, [page]);
 
   const handleConfirmDelete = async () => {
+    setDeleting(true);
     try {
       await deleteBlog(deleteId);
       setPosts((prev) => prev.filter((p) => p._id !== deleteId));
@@ -50,6 +52,7 @@ export default function PostsTable() {
     } catch (err) {
       console.error(err);
     } finally {
+      setDeleting(false);
       setDeleteId(null);
     }
   };
@@ -142,6 +145,7 @@ export default function PostsTable() {
           description="Are you sure you want to delete this post?"
           onConfirm={handleConfirmDelete}
           onCancel={() => setDeleteId(null)}
+          loading={deleting}
         />
       )}
 

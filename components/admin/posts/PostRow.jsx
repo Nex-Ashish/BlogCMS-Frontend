@@ -12,8 +12,8 @@ export default function PostRow({ post, onDelete, onEdit }) {
 
   const avatar = post?.coverImage ? (
     <img
-      src={post.coverImage}
-      alt={post.title}
+      src={post?.coverImage}
+      alt={post?.title}
       className="w-12 h-12 rounded-md object-cover flex-shrink-0"
     />
   ) : (

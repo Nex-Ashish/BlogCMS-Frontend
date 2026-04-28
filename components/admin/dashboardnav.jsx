@@ -48,14 +48,14 @@ export default function DashboardNavbar() {
 
       <div className="flex items-center gap-4">
         
-        <div className="flex items-center bg-white/5 border border-white/10 rounded-lg px-3 py-2 w-55">
+        {/* <div className="flex items-center bg-white/5 border border-white/10 rounded-lg px-3 py-2 w-55">
           <Search className="w-4 h-4 text-gray-400" />
           <input
             type="text"
             placeholder="Search..."
             className="bg-transparent outline-none text-sm text-white ml-2 w-full placeholder:text-gray-500"
           />
-        </div>
+        </div> */}
 
         <div className="relative">
           <Bell className="w-5 h-5 text-gray-300 cursor-pointer" />

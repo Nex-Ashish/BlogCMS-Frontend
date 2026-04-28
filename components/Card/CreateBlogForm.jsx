@@ -80,7 +80,7 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess, customCl
         if (role === "admin") {
           router.push("/admin/posts")
         } else {
-          router.push("/user")
+          router.push("/user/viewBlog")
         }
       }
     }, 2500)

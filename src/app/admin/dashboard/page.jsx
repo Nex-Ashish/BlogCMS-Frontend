@@ -41,13 +41,13 @@ export default function DashboardPage() {
         <div className="grid grid-cols-2 gap-4">
           <StatsCard
             title="Total Posts"
-            value={loading ? "..." : stats.totalBlogs.toLocaleString()}
+            value={loading ? "..." : (stats?.totalBlogs ?? 0).toLocaleString()}
             icon={Pencil}
             className={cardClass}
           />
           <StatsCard
             title="Total Users"
-            value={loading ? "..." : stats.totalUsers.toLocaleString()}
+            value={loading ? "..." : (stats?.totalUsers ?? 0).toLocaleString()}
             icon={Users}
             className={cardClass}
           />
