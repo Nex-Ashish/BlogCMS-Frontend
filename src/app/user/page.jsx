@@ -35,7 +35,7 @@ export default function Dashboard() {
 
       </section>
 
-      <section id="blogs" className="w-full px-4 py-3 lg:py-2 lg:px-20 min-h-screen overflow-hidden">
+      <section id="blogs" className="w-full  px-4 py-3 lg:py-2 lg:px-20 min-h-screen overflow-hidden">
         
         <MainHeading heading="Trending Blogs" />
 

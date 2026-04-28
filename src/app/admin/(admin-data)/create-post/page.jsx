@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import CreateBlogForm from "../../../../components/Card/CreateBlogForm";
+import CreateBlogForm from "../../../../../components/Card/CreateBlogForm";
 
 export default function AdminCreatePost(){
     return(
