@@ -24,8 +24,29 @@ export async function getBlogs(category = "", page = 1) {
   return data;
 }
 
+export async function getStats() {
+  const url = `${BASE_URL}/api/blogs/stats`;
+
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+  });
+
+  // console.log(res,'result')
+  const data = await res.json();
+  // console.log(data,'dataa')
+
+  if (!res.ok) {
+    throw new Error(data?.message ?? "Failed to fetch stats");
+  }
+
+  return data;
+}
+
 export async function deleteBlog(blogId) {
-  // const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const res = await fetch(`${BASE_URL}/api/blogs/${blogId}`, {
     method: "DELETE",

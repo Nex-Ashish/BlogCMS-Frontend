@@ -108,7 +108,7 @@ export default function Header() {
     // localStorage.removeItem("token"); 
     document.cookie = "token=; path=/; max-age=0";
     setToken(null);
-    router.push("/");
+    router.push("/auth/login");
   };
 
   return (
