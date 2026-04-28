@@ -9,7 +9,7 @@ import { createBlog, updateBlog } from "@/utils/blog/helper"
 import SuccessMessageCard from "./SuccessMessageCard"
 import { fetchCategories } from "@/utils/category/helper"
 
-export default function CreateBlogForm({ blogId: propBlogId, onSuccess }) {
+export default function CreateBlogForm({ blogId: propBlogId, onSuccess, customClassname }) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const blogId = propBlogId || searchParams.get("blogId")
@@ -69,8 +69,20 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess }) {
     setSuccessMsg(msg)
     setTimeout(() => {
       setSuccessMsg("")
-      if (onSuccess) onSuccess()
-      else router.push("/user")
+      if (onSuccess) {
+        onSuccess()
+      } else {
+        const tokenCookie = document.cookie.split(";").map((c) => c.trim()).find((c) => c.startsWith("token="))
+        const token = tokenCookie?.split("=")[1]
+        const role = token ? (JSON.parse(atob(token.split(".")[1])).role ?? "").toLowerCase() : ""
+        // console.log("all cookies:", token)
+        // console.log("role cookie:", role)
+        if (role === "admin") {
+          router.push("/admin/posts")
+        } else {
+          router.push("/user")
+        }
+      }
     }, 2500)
   }
 
@@ -226,7 +238,7 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess }) {
   ]
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className={customClassname}>
       {successMsg && <SuccessMessageCard message={successMsg} />}
 
       <div className="max-w-3xl mx-auto my-10 px-6 py-10 bg-gradient-to-br from-black via-[#0d0614] to-black rounded-2xl shadow-xl">
@@ -251,7 +263,6 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess }) {
             </div>
           ))}
 
-          {/* Visibility Toggle */}
           <div>
             <label className="flex items-center gap-2 text-xs font-semibold text-white/50 mb-2">
               <FontAwesomeIcon icon={faEye} className="h-3 w-3 text-indigo-400" />
@@ -273,7 +284,6 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess }) {
             </button>
           </div>
 
-          {/* Rich Text Editor */}
           <div>
             <label className="flex items-center gap-2 text-xs font-semibold text-white/50 mb-2">
               <FontAwesomeIcon icon={faPen} className="h-3 w-3 text-indigo-400" />

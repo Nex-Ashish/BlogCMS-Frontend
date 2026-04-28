@@ -78,7 +78,7 @@ export default function ProfileCard() {
         <div className="pt-12 px-7 pb-7">
           <div>
             <h1 className="text-xl font-semibold text-slate-100">
-              {user.name}
+              {user?.name}
             </h1>
             <p className="text-sm text-slate-400 mt-0.5">
               Blog Writer · Blog4u
@@ -90,14 +90,14 @@ export default function ProfileCard() {
           </p>
 
           {infoData.map((item) => (
-            <div key={item.text} className="flex items-center mb-2 gap-3 text-sm text-slate-500" >
+            <div key={item?.text} className="flex items-center mb-2 gap-3 text-sm text-slate-500" >
               <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
                 <FontAwesomeIcon
-                  icon={item.icon}
+                  icon={item?.icon}
                   className="text-slate-600 text-xs"
                 />
               </div>
-              {item.text}
+              {item?.text}
             </div>
           ))}
 
@@ -106,7 +106,7 @@ export default function ProfileCard() {
             <Button title="Logout" onClick={() => { 
               // localStorage.removeItem("token"); 
               document.cookie = "token=; path=/; max-age=0";
-              router.push("/"); 
+              router.push("/auth/login"); 
             }} customClassName="flex-1 py-2.5 cursor-pointer hover:bg-red-300 hover:text-white rounded-full border border-red-200 text-red-500 text-sm" />
           </div>
         </div>

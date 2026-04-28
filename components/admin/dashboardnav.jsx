@@ -7,9 +7,17 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/admin/ui/avatar"
+import { useRouter } from "next/navigation";
 
 export default function DashboardNavbar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    localStorage.removeItem("token");
+    router.push("/auth/login");
+  };
 
   const today = new Date().toLocaleDateString("en-US", {
     day: "numeric",
@@ -51,10 +59,17 @@ export default function DashboardNavbar() {
 
         <div className="relative">
           <Bell className="w-5 h-5 text-gray-300 cursor-pointer" />
-          <span className="absolute -top-1 -right-1 bg-purple-600 text-xs w-4 h-4 flex items-center justify-center rounded-full text-white">
+          {/* <span className="absolute -top-1 -right-1 bg-purple-600 text-xs w-4 h-4 flex items-center justify-center rounded-full text-white">
             3
-          </span>
+          </span> */}
         </div>
+
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 rounded-lg bg-purple-600 text-white text-sm hover:bg-purple-700 transition-all duration-200"
+        >
+          Logout
+        </button>
 
         {/* <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-2 rounded-lg text-sm text-gray-300">
           {today}

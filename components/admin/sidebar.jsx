@@ -26,7 +26,7 @@ export default function Sidebar() {
     },
     {
       name: "Create Post",
-      href: "/editor/create",
+      href: "/admin/create-post",
       icon: PlusSquare,
     },
     {

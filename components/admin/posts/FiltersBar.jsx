@@ -30,10 +30,10 @@ export default function FiltersBar() {
           <ChevronDown size={16} />
         </div>
 
-        <button className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-2 rounded-lg text-sm text-gray-300">
+        {/* <button className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-2 rounded-lg text-sm text-gray-300">
           <Filter size={16} />
           Filter
-        </button>
+        </button> */}
       </div>
     </div>
   );
