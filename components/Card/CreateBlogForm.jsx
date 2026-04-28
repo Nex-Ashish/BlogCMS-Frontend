@@ -80,9 +80,9 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess, customCl
         // console.log("all cookies:", token)
         // console.log("role cookie:", role)
         if (role === "admin") {
-          router.push("/admin/posts")
+          router.push(`/user/${form.slug}`);
         } else {
-          router.push(`/user/${form.slug}`)
+          router.push(`/user/${form.slug}`);
         }
       }
     }, 2500)
