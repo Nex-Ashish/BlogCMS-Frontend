@@ -32,14 +32,13 @@ export default function PostRow({ post, onDelete, onEdit }) {
 
   return (
     <>
-      {/* ── MOBILE CARD (hidden on md+) ── */}
+      {/* MOBILE CARD */}
       <tr className="md:hidden border-t border-white/10">
         <td colSpan={7} className="p-3">
           <div className="flex gap-3">
             {avatar}
 
             <div className="flex-1 min-w-0">
-              {/* Title + status */}
               <div className="flex items-start justify-between gap-2">
                 <p className="text-sm text-white font-medium truncate">{post?.title}</p>
                 <span className={`text-xs px-2 py-0.5 rounded-md whitespace-nowrap flex-shrink-0 ${statusClass}`}>
@@ -47,13 +46,11 @@ export default function PostRow({ post, onDelete, onEdit }) {
                 </span>
               </div>
 
-              {/* Author */}
               <div className="flex items-center gap-1.5 mt-1.5">
                 {authorAvatar}
                 <span className="text-xs text-gray-400">{post?.author?.name}</span>
               </div>
 
-              {/* Category + Date + Actions */}
               <div className="flex items-center justify-between mt-2">
                 <div className="flex items-center gap-2">
                   <span className="text-xs bg-purple-600/20 text-purple-400 px-2 py-0.5 rounded-md">
@@ -82,7 +79,7 @@ export default function PostRow({ post, onDelete, onEdit }) {
         </td>
       </tr>
 
-      {/* ── DESKTOP ROW (hidden below md) ── */}
+      {/* DESKTOP ROW */}
       <tr className="hidden md:table-row border-t border-white/10 hover:bg-white/5 transition">
         <td className="p-3">
           <input type="checkbox" />

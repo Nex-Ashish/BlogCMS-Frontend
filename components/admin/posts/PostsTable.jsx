@@ -1,54 +1,37 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getBlogs, deleteBlog } from "@/utils/blog/helper";
+import { useState } from "react";
+import { deleteBlog, getBlogs } from "@/utils/blog/helper";
 import DeleteConfirmModal from "../../Card/DeleteConfirmModal";
 import PostRow from "./PostRow";
 import SuccessMessageCard from "../../Card/SuccessMessageCard";
 import CreateBlogForm from "../../Card/CreateBlogForm";
 
-export default function PostsTable() {
-  const [posts, setPosts]       = useState([]);
-  const [loading, setLoading]   = useState(true);
-  const [error, setError]       = useState(null);
-  const [page, setPage]         = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [deleteId, setDeleteId] = useState(null); 
+export default function PostsTable({
+  posts,
+  loading,
+  error,
+  page,
+  totalPages,
+  onPageChange,
+  onRefresh,
+}) {
+  const [deleteId, setDeleteId]   = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
-  const [editId, setEditId]     = useState(null);
-  const [deleting, setDeleting] = useState(false); 
+  const [editId, setEditId]       = useState(null);
+  const [deleting, setDeleting]   = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
-
-    async function fetchPosts() {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await getBlogs("", page);
-        if (!cancelled) {
-          setPosts(data.blogs ?? []);
-          setTotalPages(data.pagination?.pages ?? 1);
-        }
-      } catch (err) {
-        if (!cancelled) setError(err.message);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-
-    fetchPosts();
-    return () => { cancelled = true; };
-  }, [page]);
+  const flash = (msg) => {
+    setSuccessMsg(msg);
+    setTimeout(() => setSuccessMsg(null), 3000);
+  };
 
   const handleConfirmDelete = async () => {
     setDeleting(true);
     try {
       await deleteBlog(deleteId);
-      setPosts((prev) => prev.filter((p) => p._id !== deleteId));
-
-      setSuccessMsg("Post deleted successfully!");
-      setTimeout(() => setSuccessMsg(null), 3000);
+      flash("Post deleted successfully!");
+      onRefresh();                    
     } catch (err) {
       console.error(err);
     } finally {
@@ -59,15 +42,12 @@ export default function PostsTable() {
 
   const handleEditSuccess = async () => {
     setEditId(null);
-    setSuccessMsg("Post updated successfully!");
-    setTimeout(() => setSuccessMsg(null), 3000);
-    const data = await getBlogs("", page);
-    setPosts(data.blogs ?? []);
-    setTotalPages(data.pagination?.pages ?? 1);
+    flash("Post updated successfully!");
+    onRefresh();
   };
 
   return (
-    <> 
+    <>
       <div className="space-y-4">
         <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
           <table className="w-full text-left">
@@ -111,7 +91,7 @@ export default function PostsTable() {
                   key={post._id}
                   post={post}
                   onDelete={() => setDeleteId(post._id)}
-                  onEdit={() => setEditId(post._id)} 
+                  onEdit={() => setEditId(post._id)}
                 />
               ))}
             </tbody>
@@ -121,7 +101,7 @@ export default function PostsTable() {
         {totalPages > 1 && (
           <div className="flex items-center justify-end gap-2 text-sm text-gray-400">
             <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              onClick={() => onPageChange((p) => Math.max(1, p - 1))}
               disabled={page === 1}
               className="px-3 py-1 rounded-lg bg-white/10 disabled:opacity-40 hover:bg-white/20"
             >
@@ -129,7 +109,7 @@ export default function PostsTable() {
             </button>
             <span>Page {page} of {totalPages}</span>
             <button
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              onClick={() => onPageChange((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
               className="px-3 py-1 rounded-lg bg-white/10 disabled:opacity-40 hover:bg-white/20"
             >
@@ -158,10 +138,7 @@ export default function PostsTable() {
             >
               X
             </button>
-            <CreateBlogForm
-              blogId={editId}
-              onSuccess={handleEditSuccess}
-            />
+            <CreateBlogForm blogId={editId} onSuccess={handleEditSuccess} />
           </div>
         </div>
       )}
