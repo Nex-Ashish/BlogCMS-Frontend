@@ -1,5 +1,5 @@
-import InputField from "../../../../components/admin/settings/InputField";
-import SectionCard from "../../../../components/admin/settings/SectionCard";
+import InputField from "../../../../../components/admin/settings/InputField";
+import SectionCard from "../../../../../components/admin/settings/SectionCard";
 
 export default function General() {
   return (

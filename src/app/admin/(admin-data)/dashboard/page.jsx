@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { Pencil, Users } from "lucide-react";
-import StatsCard from "../../../../components/admin/dashboard/StatsCard";
-import AnalyticsChart from "../../../../components/admin/dashboard/AnalyticsChart";
-import TopCategories from "../../../../components/admin/dashboard/TopCategories";
-import RecentPosts from "../../../../components/admin/dashboard/RecentPosts";
+import StatsCard from "../../../../../components/admin/dashboard/StatsCard";
+import AnalyticsChart from "../../../../../components/admin/dashboard/AnalyticsChart";
+import TopCategories from "../../../../../components/admin/dashboard/TopCategories";
+import RecentPosts from "../../../../../components/admin/dashboard/RecentPosts";
 import { getStats } from "@/utils/blog/helper";
 
 export default function DashboardPage() {
@@ -41,13 +41,13 @@ export default function DashboardPage() {
         <div className="grid grid-cols-2 gap-4">
           <StatsCard
             title="Total Posts"
-            value={loading ? "..." : stats.totalBlogs.toLocaleString()}
+            value={loading ? "..." : (stats?.totalBlogs ?? 0).toLocaleString()}
             icon={Pencil}
             className={cardClass}
           />
           <StatsCard
             title="Total Users"
-            value={loading ? "..." : stats.totalUsers.toLocaleString()}
+            value={loading ? "..." : (stats?.totalUsers ?? 0).toLocaleString()}
             icon={Users}
             className={cardClass}
           />

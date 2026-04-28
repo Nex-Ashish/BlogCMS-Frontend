@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import loginIcon from "../../public/assets/loginIcon.png"
 import { loginUser } from "@/utils/auth/helper";
 
-export default function LoginCard(  ) {
+export default function LoginCard({ signupShow = true }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -56,11 +56,13 @@ export default function LoginCard(  ) {
       </div>
 
       <div className="md:w-1/2 flex flex-col justify-center px-8 py-12 lg:py-16">
-        <p className="text-2xl font-bold text-white mb-1">Sign In</p>
-        <p className="text-white/40 text-sm mb-8">
-          Don't have an account?{" "}
-          <button  onClick={handleSignup} className="text-indigo-400 cursor-pointer hover:text-indigo-300">Sign up</button>
-        </p>
+        <p className="text-2xl font-bold text-white mb-2">Sign In</p>
+        {signupShow && (
+          <p className="text-white/40 text-sm mb-8">
+            Don't have an account?{" "}
+            <button onClick={handleSignup} className="text-indigo-400 cursor-pointer hover:text-indigo-300">Sign up</button>
+          </p>
+        )}
 
         {error && ( <p className="text-red-400 text-xs mb-3 ">{error}</p> )}
 

@@ -1,4 +1,4 @@
-import DangerZone from "../../../../components/admin/settings/DangerZone";
+import DangerZone from "../../../../../components/admin/settings/DangerZone";
 
 export default function Danger() {
   return (
