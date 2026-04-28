@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { getBlogs, deleteBlog } from "@/utils/blog/helper"
 import EmptyCard from "./EmptyCard"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPen, faTrash, faCircleCheck } from "@fortawesome/free-solid-svg-icons"
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons"
 import SuccessMessageCard from "./SuccessMessageCard"
 import Loading from "./Loading"
 import CreateBlogForm from "./CreateBlogForm"
@@ -59,7 +59,6 @@ export default function BlogCard() {
     const [loading, setLoading] = useState(false)
     const searchParams = useSearchParams()
 
-    // const token = typeof window !== "undefined" ? localStorage.getItem("token") : null
     const token = typeof window !== "undefined" ? document.cookie.split(';').find(c => c.trim().startsWith('token='))?.split('=')[1] : null
     const isLoggedIn = !!token
 
@@ -70,7 +69,6 @@ export default function BlogCard() {
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
     const [loadingMore, setLoadingMore] = useState(false)
-
 
     const showSuccess = (msg) => {
         setSuccessMsg(msg)
@@ -93,6 +91,7 @@ export default function BlogCard() {
             const publicBlogs = allBlogs.filter(blog => blog?.isPublic === true || blog?.isPublic === undefined)
             const filtered = userId ? publicBlogs.filter(b => b?.author?._id === userId) : publicBlogs
             setBlogs(prev => pageNum === 1 ? filtered : [...prev, ...filtered])
+
             if (userId) {
                 setTotalPages(1)
             } else {
@@ -120,6 +119,22 @@ export default function BlogCard() {
         }
         setShowFull(isOpen ? null : index)
     }
+
+    // {ADDED: this opens dynamic [slug] page}
+    const handleReadBlog = (blog) => {
+        const finalSlug = blog.slug || blog.title
+            ?.toLowerCase()
+            .trim()
+            .replace(/\s+/g, "-")
+            .replace(/[^\w-]+/g, "");
+
+        if (!finalSlug) {
+            alert("Slug is missing for this blog");
+            return;
+        }
+
+        router.push(`/user/${finalSlug}`);
+    };
 
     const handleEdit = (blogId) => {
         setEditBlogId(blogId)
@@ -152,21 +167,25 @@ export default function BlogCard() {
     return (
         <>
             {editBlogId && (
-                <div className="fixed inset-0 z-50  backdrop-blur-sm overflow-y-auto">
-                    <div className=" flex items-start justify-center py-10 px-4">
+                <div className="fixed inset-0 z-50 backdrop-blur-sm overflow-y-auto">
+                    <div className="flex items-start justify-center py-10 px-4">
                         <div className="relative w-full max-w-3xl">
                             <button
-                            onClick={() => setEditBlogId(null)}
-                            className="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors"
+                                onClick={() => setEditBlogId(null)}
+                                className="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors"
                             >
-                            X
+                                X
                             </button>
-                            <CreateBlogForm blogId={editBlogId} onSuccess={() => {
-                            setEditBlogId(null)
-                            showSuccess("Your blog has been updated successfully.")
-                            setBlogs([])    
-                            fetchData(1) 
-                            }} />
+
+                            <CreateBlogForm
+                                blogId={editBlogId}
+                                onSuccess={() => {
+                                    setEditBlogId(null)
+                                    showSuccess("Your blog has been updated successfully.")
+                                    setBlogs([])
+                                    fetchData(1)
+                                }}
+                            />
                         </div>
                     </div>
                 </div>
@@ -178,7 +197,6 @@ export default function BlogCard() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-4 sm:px-6 lg:px-8 py-8">
                 {blogs.map((blog, index) => {
                     const isOpen = showFull === index
-                    const shortText = blog.content?.slice(0, 100) || ""
                     const authorName = blog.author?.name || ""
                     const initials = getInitials(authorName)
                     const avatarColor = getAvatarColor(authorName)
@@ -215,14 +233,30 @@ export default function BlogCard() {
 
                             <div className="px-5 py-4 flex flex-col flex-1">
                                 <h2 className="font-bold text-sm text-slate-800 leading-snug mb-2">{blog.title}</h2>
-                                <div className="text-sm text-slate-500 leading-relaxed font-light flex-1 prose prose-sm max-w-none"
+
+                                <div
+                                    className="text-sm text-slate-500 leading-relaxed font-light flex-1 prose prose-sm max-w-none"
                                     dangerouslySetInnerHTML={{
                                         __html: isOpen ? blog.content : `${blog.content?.slice(0, 100) || ""}...`
                                     }}
                                 />
-                                <button onClick={() => handleSeeMore(index, isOpen)} className="mt-3 self-start text-xs cursor-pointer font-medium text-indigo-500 hover:text-indigo-700 tracking-widest uppercase transition-colors duration-200">
-                                    {isOpen ? "See less" : "See more"}
-                                </button>
+
+                                <div className="flex gap-4 mt-3">
+                                    <button
+                                        onClick={() => handleSeeMore(index, isOpen)}
+                                        className="self-start text-xs cursor-pointer font-medium text-indigo-500 hover:text-indigo-700 tracking-widest uppercase transition-colors duration-200"
+                                    >
+                                        {isOpen ? "See less" : "See more"}
+                                    </button>
+
+                                    {/* ADDED: Read More button for dynamic route */}
+                                    <button
+                                        onClick={() => handleReadBlog(blog)}
+                                        className="self-start text-xs cursor-pointer font-medium text-purple-500 hover:text-purple-700 tracking-widest uppercase transition-colors duration-200"
+                                    >
+                                        Read More
+                                    </button>
+                                </div>
                             </div>
 
                             {blog.tags?.length > 0 && (
@@ -242,11 +276,11 @@ export default function BlogCard() {
             {page < totalPages && (
                 <div className="flex justify-center mt-4 pb-8">
                     <button
-                    onClick={handleLoadMore}
-                    disabled={loadingMore}
-                    className="px-6 py-2.5 rounded-full text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-500 disabled:opacity-50 transition-colors"
+                        onClick={handleLoadMore}
+                        disabled={loadingMore}
+                        className="px-6 py-2.5 rounded-full text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-500 disabled:opacity-50 transition-colors"
                     >
-                    {loadingMore ? "Loading..." : "Load More"}
+                        {loadingMore ? "Loading..." : "Load More"}
                     </button>
                 </div>
             )}
