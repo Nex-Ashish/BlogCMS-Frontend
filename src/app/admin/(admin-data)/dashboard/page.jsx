@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { Pencil, Users } from "lucide-react";
-import StatsCard from "../../../../components/admin/dashboard/StatsCard";
-import AnalyticsChart from "../../../../components/admin/dashboard/AnalyticsChart";
-import TopCategories from "../../../../components/admin/dashboard/TopCategories";
-import RecentPosts from "../../../../components/admin/dashboard/RecentPosts";
+import StatsCard from "../../../../../components/admin/dashboard/StatsCard";
+import AnalyticsChart from "../../../../../components/admin/dashboard/AnalyticsChart";
+import TopCategories from "../../../../../components/admin/dashboard/TopCategories";
+import RecentPosts from "../../../../../components/admin/dashboard/RecentPosts";
 import { getStats } from "@/utils/blog/helper";
 
 export default function DashboardPage() {

@@ -1,6 +1,6 @@
 "use client";
 
-import SettingsLayout from "../../../../components/admin/settings/SettingsLayout";
+import SettingsLayout from "../../../../../components/admin/settings/SettingsLayout";
 import Danger from "./danger";
 import General from "./general";
 import Social from "./social";

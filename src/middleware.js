@@ -16,9 +16,11 @@ export async function middleware(request) {
   const isPublic = pathname === "/user/about" || pathname.startsWith("/user/legal");
   const isUserRoute = pathname.startsWith("/user/");
   const isAdminRoute = pathname.startsWith("/admin");
+  const isAdminRootOnly = pathname === "/admin";
 
   if (!token) {
     if (isPublic) return NextResponse.next();
+    if (isAdminRootOnly) return NextResponse.next();
     if (isUserRoute || isAdminRoute) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
@@ -35,7 +37,7 @@ export async function middleware(request) {
 
   const role = payload?.role?.toLowerCase();
 
-  if (isAdminRoute && role !== "admin" && role === "user") {
+  if (isAdminRoute && !isAdminRootOnly && role !== "admin") {
     return NextResponse.redirect(new URL("/user", request.url));
   }
 
