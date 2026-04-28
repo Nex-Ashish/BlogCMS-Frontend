@@ -16,7 +16,7 @@ export default function DashboardNavbar() {
   const handleLogout = () => {
     document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     localStorage.removeItem("token");
-    router.push("/auth/login");
+    router.push("/admin");
   };
 
   const today = new Date().toLocaleDateString("en-US", {
