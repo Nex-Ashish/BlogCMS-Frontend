@@ -21,7 +21,7 @@ export default function TeamSection() {
         <p className="text-white/40 text-sm mt-2">Three developers building something better.</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto relative z-10 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto relative z-10 w-full">
         {team.map((member, i) => (
           <div key={i} className="relative bg-white/[0.04] border border-white/[0.08] rounded-2xl p-7 text-center hover:bg-indigo-500/10 hover:border-indigo-500/40 transition-all">
             <div className="w-14 h-14 mx-auto mb-4 flex items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 ring-4 ring-indigo-500/20">

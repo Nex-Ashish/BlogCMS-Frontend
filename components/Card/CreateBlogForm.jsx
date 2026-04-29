@@ -16,13 +16,14 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess, customCl
   const isEdit = !!blogId
   const [categories, setCategories] = useState([])
   const [existingImage, setExistingImage] = useState("")
+  const [tagInput, setTagInput] = useState("");
 
   const [form, setForm] = useState({
     title: "",
     content: "",
     slug: "",
     category: "",
-    tags: "",
+    tags: [],
     image: null,
     isPublic: true,
   })
@@ -55,7 +56,8 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess, customCl
           slug: blog.slug || "",
           content: blog.content || "",
           category: blog.category?.title || "",
-          tags: blog.tags?.join(", ") || "",
+          // tags: blog.tags?.join(", ") || "",
+          tags: blog.tags || [], 
           image: null,
           isPublic: blog.isPublic ?? true,
         })
@@ -111,7 +113,7 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess, customCl
       return;
     }
     try {
-      const tagsArray = form.tags.split(",").map(t => t.trim()).filter(Boolean)
+      const tagsArray = form.tags;
 
       if (isEdit) {
         const formData = new FormData()
@@ -186,10 +188,11 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess, customCl
       node: (
         <input
           type="text"
+          disabled={true}
           placeholder="your-blog-slug"
           value={form.slug}
           onChange={e => setForm({ ...form, slug: e.target.value })}
-          className="w-full bg-white/10 border border-white/10 text-white placeholder-white/25 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          className="cursor-not-allowed w-full bg-white/10 border border-white/10 text-white placeholder-white/25 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
         />
       ),
     },
@@ -214,15 +217,47 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess, customCl
     {
       icon: faTag,
       label: "Tags",
-      hint: "comma separated",
+      hint: "press enter to add",
       node: (
-        <input
-          type="text"
-          placeholder="travel, nature, hiking"
-          value={form.tags}
-          onChange={e => setForm({ ...form, tags: e.target.value })}
-          className="w-full bg-white/10 border border-white/10 text-white placeholder-white/25 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-        />
+        <div>
+          <input
+            type="text"
+            placeholder="travel, nature, hiking"
+            value={tagInput}
+            onChange={(e) => setTagInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && tagInput.trim()) {
+                e.preventDefault();
+                setForm({
+                  ...form,
+                  tags: [...(form.tags || []), tagInput.trim()],
+                });
+                setTagInput("");
+              }
+            }}
+            className="w-full bg-white/10 border border-white/10 text-white placeholder-white/25 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          />
+
+          <div className="flex flex-wrap gap-2 mt-3">
+            {form?.tags?.map((tag, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-2 bg-indigo-500/20 text-indigo-300 px-3 py-1 rounded-full text-xs"
+              >
+                {tag}
+                <button
+                  onClick={() => {
+                    const updated = form.tags.filter((_, i) => i !== index);
+                    setForm({ ...form, tags: updated });
+                  }}
+                  className="text-red-400 hover:text-red-600"
+                >
+                  X
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
       ),
     },
     {
@@ -277,7 +312,7 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess, customCl
     <div className={customClassname}>
       {successMsg && <SuccessMessageCard message={successMsg} />}
 
-      <div className="max-w-3xl mx-auto my-10 px-6 py-10 bg-gradient-to-br from-black via-[#0d0614] to-black rounded-2xl shadow-xl">
+      <div className="max-w-3xl mx-auto px-6 py-10 bg-gradient-to-br from-black via-[#0d0614] to-black rounded-2xl shadow-xl">
         <h1 className="text-2xl font-bold text-white mb-1">
           {isEdit ? "Edit Blog" : "Create Blog"}
         </h1>

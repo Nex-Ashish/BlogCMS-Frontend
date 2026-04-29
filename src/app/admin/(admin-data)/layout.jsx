@@ -4,9 +4,16 @@ import { useState } from "react";
 import { Menu } from "lucide-react";
 import DashboardNavbar from "../../../../components/admin/dashboardnav";
 import Sidebar from "../../../../components/admin/sidebar";
+import { useRouter } from "next/navigation";
 
 export default function AdminLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const router = useRouter();
+  
+  const handleLogout = () => {
+    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    router.push("/admin");
+  };
 
   return (
     <div className="flex h-screen bg-[#0B0F1A] text-white">
@@ -25,7 +32,15 @@ export default function AdminLayout({ children }) {
           >
             <Menu size={20} />
           </button>
-          <span className="text-white font-semibold text-sm">Admin Panel</span>
+          <div className="flex justify-between w-full items-center">
+            <span className="text-white font-semibold text-sm">Admin Panel</span>
+            <button
+              onClick={handleLogout}
+              className="px-4 block md:hidden  py-2 rounded-lg bg-purple-600 text-white text-sm hover:bg-purple-700 transition-all duration-200"
+            >
+              Logout
+            </button>
+          </div>
         </div>
 
         <DashboardNavbar />

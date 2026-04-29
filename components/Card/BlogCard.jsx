@@ -50,7 +50,7 @@ function DeleteConfirmCard({ onConfirm, onCancel }) {
     )
 }
 
-export default function BlogCard() {
+export default function BlogCard({ isRedirected = false }) {
     const [showFull, setShowFull] = useState(null)
     const [deleteId, setDeleteId] = useState(null)
     const [successMsg, setSuccessMsg] = useState("")
@@ -112,13 +112,13 @@ export default function BlogCard() {
         fetchData(nextPage)
     }
 
-    const handleSeeMore = (index, isOpen) => {
-        if (!isLoggedIn) {
-            router.push("/auth/login")
-            return
-        }
-        setShowFull(isOpen ? null : index)
-    }
+    // const handleSeeMore = (index, isOpen) => {
+    //     if (!isLoggedIn) {
+    //         router.push("/auth/login")
+    //         return
+    //     }
+    //     setShowFull(isOpen ? null : index)
+    // }
 
     // {ADDED: this opens dynamic [slug] page}
     const handleReadBlog = (blog) => {
@@ -172,7 +172,7 @@ export default function BlogCard() {
                         <div className="relative w-full max-w-3xl">
                             <button
                                 onClick={() => setEditBlogId(null)}
-                                className="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors"
+                                className="absolute top-13 right-3 z-10 w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors"
                             >
                                 X
                             </button>
@@ -202,11 +202,20 @@ export default function BlogCard() {
                     const avatarColor = getAvatarColor(authorName)
 
                     return (
-                        <div key={blog._id} className="bg-white rounded-2xl flex flex-col border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+                        <div key={blog?._id} 
+                            onClick={ (e) => {
+                                e.preventDefault()
+                                if(isRedirected){
+                                    handleReadBlog(blog)
+                                }
+                            }}
+                            className={`hover:scale-125 bg-white rounded-2xl flex flex-col border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 overflow-hidden
+                            ${isRedirected ? "cursor-pointer" : "cursor-default"}
+                            `}>
                             <div className="flex items-center gap-3 px-5 pt-5 pb-4 border-b border-slate-50">
                                 <div className="w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center overflow-hidden ring-2 ring-offset-1 ring-indigo-100">
                                     {blog.coverImage ? (
-                                        <Image src={blog.coverImage} width={44} height={44} alt={blog.title} className="object-cover w-full h-full" />
+                                        <Image src={blog.coverImage} width={44} height={44} alt={blog.title} className=" object-cover w-full h-full" />
                                     ) : (
                                         <div className={`w-full h-full flex items-center justify-center text-sm font-semibold ${avatarColor}`}>
                                             {initials}
@@ -242,12 +251,12 @@ export default function BlogCard() {
                                 />
 
                                 <div className="flex gap-4 mt-3">
-                                    <button
+                                    {/* <button
                                         onClick={() => handleSeeMore(index, isOpen)}
                                         className="self-start text-xs cursor-pointer font-medium text-indigo-500 hover:text-indigo-700 tracking-widest uppercase transition-colors duration-200"
                                     >
                                         {isOpen ? "See less" : "See more"}
-                                    </button>
+                                    </button> */}
 
                                     {/* ADDED: Read More button for dynamic route */}
                                     <button

@@ -44,7 +44,7 @@ export default function AnalyticsChart() {
 
   return (
     <div className="bg-white/5 border border-white/10 rounded-xl p-5 shadow-[1px_1px_10px_1px_#800fd1]">
-      <div className="flex justify-between mb-4">
+      <div className="flex justify-between md:flex-row flex-col items-center gap-2 mb-4">
         <h3 className="text-white font-semibold">Analytics Overview</h3>
         <span className="text-xs text-gray-400">By Category</span>
       </div>
@@ -64,39 +64,42 @@ export default function AnalyticsChart() {
           <p className="text-red-400 text-xs">{error}</p>
         </div>
       ) : (
-        <>
-          <div className="h-40 flex items-end gap-2">
+        /* Scrollable wrapper — bars never squish below min-width on small screens */
+        <div className="overflow-x-auto -mx-1 px-1">
+          <div
+            className="flex items-end gap-2"
+            style={{ minWidth: `${data.length * 48}px` }} /* 48px min per bar */
+          >
             {data.map(({ cat, count }) => (
               <div
                 key={cat}
-                className="flex-1 flex flex-col items-center gap-1"
+                className="flex flex-col items-center gap-1"
+                style={{ flex: "1 0 40px" }} /* grow but never shrink below 40px */
               >
-                <span className="text-[10px] text-purple-300 font-medium">
+                {/* Count label */}
+                <span className="text-[10px] text-purple-300 font-medium leading-none">
                   {count}
                 </span>
 
+                {/* Bar track */}
                 <div className="w-full bg-white/10 rounded-md overflow-hidden flex items-end h-32">
                   <div
-                    className="w-full bg-gradient-to-t from-purple-600 to-[#b070de] transition-all duration-700"
-                    style={{
-                      height: `${(count / maxCount) * 100}%`,
-                    }}
+                    className="w-full bg-gradient-to-t from-purple-600 to-[#b070de] transition-all duration-700 rounded-md"
+                    style={{ height: `${(count / maxCount) * 100}%` }}
                   />
                 </div>
-              </div>
-            ))}
-          </div>
 
-          <div className="flex gap-2 mt-2">
-            {data.map(({ cat }) => (
-              <div key={cat} className="flex-1 text-center">
-                <span className="text-[9px] text-gray-400 truncate block leading-tight">
+                {/* Category label — sits below bar, truncates with tooltip */}
+                <span
+                  className="text-[10px] text-gray-400 w-full text-center leading-tight block truncate"
+                  title={cat}          /* native tooltip shows full name on hover */
+                >
                   {cat}
                 </span>
               </div>
             ))}
           </div>
-        </>
+        </div>
       )}
     </div>
   );
