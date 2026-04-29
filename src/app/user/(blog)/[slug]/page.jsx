@@ -8,7 +8,7 @@ async function getSingleBlog(slug) {
 
     const data = await res.json();
 
-    console.log("API DATA:", data);
+    // console.log("API DATA:", data);
 
     const blogs = data.blogs || data?.data || [];
 
@@ -71,12 +71,21 @@ export default async function BlogPage({ params }) {
         </h1>
 
         {/* Author + Date */}
-        <div className="flex items-center gap-4 text-sm text-gray-500 mb-8">
-          <p>By {blog.author?.name || "Unknown Author"}</p>
-          <span>•</span>
-          <p>
-            {new Date(blog.createdAt).toLocaleDateString()}
-          </p>
+        <div className="grid items-center gap-2 text-sm text-gray-500 mb-8">
+          <div className="flex gap-3">
+            <p>By {blog.author?.name || "Unknown Author"}</p>
+            <span>•</span>
+            <p>
+              {new Date(blog.createdAt).toLocaleString()}
+            </p>
+          </div>
+
+          <div className="flex gap-3">
+            <p>Last Updated</p><span>•</span>
+            <p>
+              {new Date(blog.updatedAt).toLocaleString()}
+            </p>
+          </div>
         </div>
 
         {/* Content */}

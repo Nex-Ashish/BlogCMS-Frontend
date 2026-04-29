@@ -13,7 +13,7 @@ export async function middleware(request) {
   const token = request.cookies.get("token")?.value;
   const { pathname } = request.nextUrl;
 
-  const isPublic = pathname === "/user/about" || pathname.startsWith("/user/legal");
+  const isPublic = pathname === "/user/about" || pathname.startsWith("/user/legal") || /^\/user\/[^/]+$/.test(pathname);;
   const isUserRoute = pathname.startsWith("/user/");
   const isAdminRoute = pathname.startsWith("/admin");
   const isAdminRootOnly = pathname === "/admin";

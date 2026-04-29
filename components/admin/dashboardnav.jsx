@@ -15,7 +15,6 @@ export default function DashboardNavbar() {
 
   const handleLogout = () => {
     document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-    localStorage.removeItem("token");
     router.push("/admin");
   };
 
@@ -66,7 +65,7 @@ export default function DashboardNavbar() {
 
         <button
           onClick={handleLogout}
-          className="px-4 py-2 rounded-lg bg-purple-600 text-white text-sm hover:bg-purple-700 transition-all duration-200"
+          className="px-4 hidden md:block py-2 rounded-lg bg-purple-600 text-white text-sm hover:bg-purple-700 transition-all duration-200"
         >
           Logout
         </button>
