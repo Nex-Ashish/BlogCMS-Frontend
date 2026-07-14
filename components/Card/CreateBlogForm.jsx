@@ -21,7 +21,6 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess, customCl
   const [form, setForm] = useState({
     title: "",
     content: "",
-    slug: "",
     category: "",
     tags: [],
     image: null,
@@ -40,55 +39,64 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess, customCl
     },
   })
 
+
   useEffect(() => {
-    if (!propBlogId) return
+    if (!propBlogId) return;
+
     const fetchBlog = async () => {
       try {
-        const token = document.cookie.split(';').find(c => c.trim().startsWith('token='))?.split('=')[1]
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/${propBlogId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
-        const data = await res.json()
-        const blog = data.blog || data
-        setExistingImage(blog.coverImage || "")
+        const token = document.cookie
+          .split(";")
+          .find((c) => c.trim().startsWith("token="))
+          ?.split("=")[1];
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/${propBlogId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await res.json();
+        const blog = data.blog || data;
+
+        setExistingImage(blog.coverImage || "");
+
         setForm({
           title: blog.title || "",
-          slug: blog.slug || "",
           content: blog.content || "",
           category: blog.category?.title || "",
-          // tags: blog.tags?.join(", ") || "",
-          tags: blog.tags || [], 
+          tags: blog.tags || [],
           image: null,
           isPublic: blog.isPublic ?? true,
-        })
-        editor?.commands.setContent(blog.content || "")
-      } catch (err) {
-        console.log(err)
-      }
-    }
-    fetchBlog()
-  }, [propBlogId, editor])
+        });
 
-  const showSuccess = (msg) => {
-    setSuccessMsg(msg)
-    setTimeout(() => {
-      setSuccessMsg("")
-      if (onSuccess) {
-        onSuccess()
-      } else {
-        const tokenCookie = document.cookie.split(";").map((c) => c.trim()).find((c) => c.startsWith("token="))
-        const token = tokenCookie?.split("=")[1]
-        const role = token ? (JSON.parse(atob(token.split(".")[1])).role ?? "").toLowerCase() : ""
-        // console.log("all cookies:", token)
-        // console.log("role cookie:", role)
-        if (role === "admin") {
-          router.push(`/user/${form.slug}`);
-        } else {
-          router.push(`/user/${form.slug}`);
-        }
+        editor?.commands.setContent(blog.content || "");
+      } catch (err) {
+        console.log(err);
       }
-    }, 2500)
-  }
+    };
+
+    fetchBlog();
+  }, [propBlogId, editor]);
+
+  const showSuccess = (msg, slug) => {
+    setSuccessMsg(msg);
+
+    setTimeout(() => {
+      setSuccessMsg("");
+
+      if (onSuccess) {
+        onSuccess();
+      } else if (slug) {
+        router.push(`/user/${slug}`);
+      } else {
+        router.push("/user");
+      }
+    }, 2500);
+  };
 
   useEffect(() => {
     const getCategories = async () => {
@@ -105,27 +113,21 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess, customCl
   const handleSubmit = async () => {
     setError(null)
     setLoading(true)
-    const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-    if (!slugRegex.test(form.slug)) {
-      setError("Slug must be lowercase and use hyphens only. Example: my-first-blog");
-      setLoading(false);
-      return;
-    }
     try {
       const tagsArray = form.tags;
 
       if (isEdit) {
         const formData = new FormData()
         formData.append("title", form.title)
-        formData.append("slug", form.slug)
+        // formData.append("slug", form.slug)
         formData.append("content", form.content)
         formData.append("category", form.category)
         formData.append("tags", JSON.stringify(tagsArray))
         formData.append("isPublic", form.isPublic)
         if (form.image) formData.append("image", form.image)
-        await updateBlog(blogId, formData)
-        showSuccess("Your blog has been updated successfully.")
+        const response = await updateBlog(blogId, formData);
+        showSuccess( "Your blog has been updated successfully.", response?.blog?.slug );
       } else {
         const formData = new FormData()
         formData.append("title", form.title)
@@ -134,8 +136,8 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess, customCl
         formData.append("tags", JSON.stringify(tagsArray))
         formData.append("isPublic", form.isPublic)
         if (form.image) formData.append("image", form.image)
-        await createBlog(formData)
-        showSuccess("Your blog has been published successfully.")
+        const response = await createBlog(formData);
+        showSuccess( "Your blog has been published successfully.", response?.blog?.slug );
       }
     } catch (err) {
       setError(err.message)
@@ -164,35 +166,13 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess, customCl
           placeholder="Your blog title..."
           maxLength={20}
           value={form.title}
-          onChange={e => {
-            const title = e.target.value;
-            const generatedSlug = title
-              .toLowerCase()
-              .trim()
-              .replace(/\s+/g, "-")
-              .replace(/[^\w\-]+/g, "");
-
+          onChange={(e) =>
             setForm({
               ...form,
-              title,
-              slug: generatedSlug,
-            });
-          }}
+              title: e.target.value,
+            })
+          }
           className="w-full bg-white/10 border border-white/10 text-white placeholder-white/25 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-        />
-      ),
-    },
-    {
-      icon: faPen,
-      label: "Slug",
-      node: (
-        <input
-          type="text"
-          disabled={true}
-          placeholder="your-blog-slug"
-          value={form.slug}
-          onChange={e => setForm({ ...form, slug: e.target.value })}
-          className="cursor-not-allowed w-full bg-white/10 border border-white/10 text-white placeholder-white/25 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
         />
       ),
     },
@@ -387,9 +367,9 @@ export default function CreateBlogForm({ blogId: propBlogId, onSuccess, customCl
 
         <button
           onClick={handleSubmit}
-          disabled={loading || !form.title || !form.slug || !form.content}
+          disabled={loading || !form.title.trim() || !editor?.getText().trim()}
           className={`w-full py-3 rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-2
-            ${!loading && form.title && form.slug && form.content
+            ${!loading && form.title.trim() && editor?.getText().trim()
               ? "bg-indigo-600 text-white hover:bg-indigo-500"
               : "bg-white/5 text-white/30 cursor-not-allowed"
             }`}

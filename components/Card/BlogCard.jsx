@@ -122,18 +122,12 @@ export default function BlogCard({ isRedirected = false }) {
 
     // {ADDED: this opens dynamic [slug] page}
     const handleReadBlog = (blog) => {
-        const finalSlug = blog.slug || blog.title
-            ?.toLowerCase()
-            .trim()
-            .replace(/\s+/g, "-")
-            .replace(/[^\w-]+/g, "");
-
-        if (!finalSlug) {
+        if (!blog.slug) {
             alert("Slug is missing for this blog");
             return;
         }
 
-        router.push(`/user/${finalSlug}`);
+        router.push(`/user/${blog.slug}`);
     };
 
     const handleEdit = (blogId) => {

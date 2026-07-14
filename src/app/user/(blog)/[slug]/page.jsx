@@ -12,15 +12,7 @@ async function getSingleBlog(slug) {
 
     const blogs = data.blogs || data?.data || [];
 
-    const blog = blogs.find((item) => {
-      const generatedSlug = item.title
-        ?.toLowerCase()
-        .trim()
-        .replace(/\s+/g, "-")
-        .replace(/[^\w-]+/g, "");
-
-      return item.slug === slug || generatedSlug === slug;
-    });
+    const blog = blogs.find((item) => item.slug === slug);
 
     return blog ? { blog } : null;
   } catch (error) {
